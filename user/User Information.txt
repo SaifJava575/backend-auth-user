@@ -1,0 +1,31 @@
+1.Training 
+https://tradexchange.techno-associates.live/training/
+
+userName:newtest32   password : Lsipl#2023
+
+2.TradeExchange Database 
+ url : http://pgadmin.tradexchange.logicsoft.online:8082/browser/
+username logicsoft120@gmail.com
+password:Admin@1234
+
+
+3.Foscos Database 
+  url : https://pgadmindatabase.fssai.gov.in/browser/
+  username : logicsoft120@gmail.com
+  password :Saif@2024
+
+3.FCI 
+---------------
+http://fciqms.in/fci/#
+USER Name : 1.hq123  password :Dilip@2023
+            2.vikash321  
+            3.vikash12
+
+fcilabadmin
+divisionlabadmin
+zonelabadmin
+regionlabadmin
+depotlabadmin
+
+
+  
