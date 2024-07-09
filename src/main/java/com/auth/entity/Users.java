@@ -11,7 +11,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "users", schema = "auth")
+@Table(name = "users")
 @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u")
 public class Users implements Serializable {
 
