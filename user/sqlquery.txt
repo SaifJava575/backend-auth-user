@@ -1,7 +1,74 @@
 
-CREATE TABLE auth.users (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL
 );
+
+-----------------------
+CREATE TABLE IF NOT EXISTS users_details
+(
+    user_id SERIAL PRIMARY KEY,
+    login_id VARCHAR(200) NOT NULL UNIQUE,
+    user_pwd VARCHAR(200) NOT NULL,
+    user_mobile_no VARCHAR(200),
+    user_email VARCHAR(200),
+    date_of_birth DATE,
+    personal_email VARCHAR(100),
+    personal_mobile_no VARCHAR(15),
+    date_of_joining DATE,
+    designation VARCHAR(100),
+    active_flag BOOLEAN NOT NULL,
+    secret_key VARCHAR(100),
+    temp_otp VARCHAR(50),
+    dev_pwd VARCHAR(200),
+    last_change_password_updated_on TIMESTAMP WITHOUT TIME ZONE,
+    last_login_updated_on TIMESTAMP WITHOUT TIME ZONE,
+    created_on TIMESTAMP WITHOUT TIME ZONE,
+    created_by BIGINT,
+    updated_on TIMESTAMP WITHOUT TIME ZONE,
+    updated_by BIGINT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    address VARCHAR(1000),
+    country VARCHAR(20),
+    phone_number VARCHAR(20),
+    website VARCHAR(500),
+    is_login_notification_enabled BOOLEAN DEFAULT true,
+    is_sms_notification_enabled BOOLEAN DEFAULT true,
+    secret_question_id INTEGER,
+    secret_question_answer VARCHAR(2000),
+    others_name VARCHAR(100)
+);
+-----------------------------------------
+CREATE TABLE IF NOT EXISTS user_roles
+(
+    user_id integer NOT NULL,
+    role_id integer NOT NULL,
+    active_flag boolean,
+    created_on timestamp without time zone,
+    created_by bigint,
+    updated_on timestamp without time zone,
+    updated_by bigint,
+    CONSTRAINT pk_user_roles_user_id_role_id PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fk_user_roles_role_id FOREIGN KEY (role_id)
+        REFERENCES master_user_roles (role_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+--------------------------------------
+CREATE TABLE IF NOT EXISTS master_user_roles
+(
+    role_id SERIAL PRIMARY KEY,
+    role_name character varying(50) COLLATE pg_catalog."default",
+    role_name_desc character varying(100) COLLATE pg_catalog."default",
+    active_flag boolean,
+    created_on timestamp without time zone,
+    created_by bigint,
+    updated_on timestamp without time zone,
+    updated_by bigint
+   
+)
+------------------------------
 
