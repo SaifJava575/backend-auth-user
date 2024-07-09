@@ -71,4 +71,22 @@ CREATE TABLE IF NOT EXISTS master_user_roles
    
 )
 ------------------------------
+CREATE TABLE IF NOT EXISTS user_password_history
+(
+    pwd_hist_id SERIAL PRIMARY KEY,
+    user_id integer,
+    old_password character varying(250) COLLATE pg_catalog."default",
+    old_password_updated_on timestamp without time zone,
+    created_on timestamp without time zone,
+    created_by bigint,
+    updated_on timestamp without time zone,
+    updated_by bigint,
+    CONSTRAINT fk_user_password_history_user_id FOREIGN KEY (user_id)
+        REFERENCES users_details (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+------------------------------------
+
 

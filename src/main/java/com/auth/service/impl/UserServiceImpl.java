@@ -17,35 +17,49 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.auth.bean.JavaConstant;
+import com.auth.bean.SignUpSearchBean;
 import com.auth.bean.Status;
 import com.auth.bean.UserSignUpWrapper;
 import com.auth.dao.IGenericDao;
 import com.auth.entity.UserAndUserRolesPk;
+import com.auth.entity.UserDetails;
+import com.auth.entity.UserPasswordHistory;
 import com.auth.entity.UserRoles;
+import com.auth.entity.Users;
 import com.auth.service.UserService;
+import com.auth.utility.UtilProperty;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private IGenericDao iGenericDao;
 
-	
+	@Autowired
+	private UtilProperty utility;
+
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 	@Override
+	@Transactional
 	public Status saveUserDeatails(UserSignUpWrapper userSignUpWrapper) {
 		try {
 			String alreadyExists = "";
 			if (userSignUpWrapper.getUserDeatails().getLoginId() != null) {
-       List<Map<String,Object>> users = iGenericDao.executeDDLHQL(JavaConstant.CHECK_LOGIN_ID_EXISTS,
-				new Object[] { userSignUpWrapper.getUserDeatails().getLoginId().toLowerCase().replaceAll(" ", "") });  		   
+				List<Map<String, Object>> users = iGenericDao.executeDDLHQL(JavaConstant.CHECK_LOGIN_ID_EXISTS,
+						new Object[] {
+								userSignUpWrapper.getUserDeatails().getLoginId().toLowerCase().replaceAll(" ", "") });
 				if (users.size() > 0) {
 					alreadyExists = "loginIdExists";
-					return new Status("205",alreadyExists,users.get(0).get("userId").toString());
+					return new Status("205", alreadyExists, users.get(0).get("userId").toString());
 				}
 
 				if (alreadyExists.equals("")) {
@@ -58,17 +72,18 @@ public class UserServiceImpl implements UserService {
 						iGenericDao.save(userRoles);
 					}
 				}
-				return new Status("200","Sign Up Successfull",userSignUpWrapper.getUserDeatails().getUserId().toString());			
+				return new Status("200", "Sign Up Successfull",
+						userSignUpWrapper.getUserDeatails().getUserId().toString());
 			} else {
 				alreadyExists = "didNotProvideLoginId";
-				return new Status("206","Please provide Login id");
+				return new Status("206", "Please provide Login id");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new Status("500","Please provide Login id");
+			return new Status("500", "Please provide Login id");
 		}
 	}
-	
+
 	@Override
 	public void captchaRequest(HttpServletResponse response) {
 		try {
@@ -102,9 +117,9 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	static String encryptionPassword(String password) {
 		try {
@@ -122,5 +137,110 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 			return e.toString();
 		}
+	}
+
+	@Override
+	@Transactional
+	public String updateUserDetails(UserSignUpWrapper userDetails) {
+		String updateStatus = "";
+		try {
+			UserDetails userInfo = userDetails.getUserDeatails();
+			List<UserRoles> userRoles = userDetails.getUserRoles();
+			List<Users> fetchMasterUserDetails = iGenericDao.executeDDLHQL(JavaConstant.UPDATE_USER_DETAILS_ALL_BY_ID,
+					new Object[] { userInfo.getUserId() });
+
+			if (fetchMasterUserDetails.size() > 0) {
+
+				Users fetchMasterUserDetailsInfo = fetchMasterUserDetails.get(0);
+				utility.copyNonNullProperties(userDetails, fetchMasterUserDetailsInfo);
+				iGenericDao.update(fetchMasterUserDetailsInfo);
+
+				for (UserRoles roles : userRoles) {
+					List<?> userRolesDetails = iGenericDao.executeDDLHQL(JavaConstant.USER_ROLE_BY_USER_ID,
+							new Object[] { userInfo.getUserId(), roles.getId().getRoleId() });
+					Integer roleId = 0;
+					if (userRolesDetails != null && userRolesDetails.size() > 0) {
+						Object[] value = (Object[]) userRolesDetails.get(0);
+						roleId = (Integer) value[1];
+						utility.copyNonNullProperties(roles, value);
+						iGenericDao.update(roles);
+					} else if (userRolesDetails.size() == 0) {
+						if (roles.getActiveFlag() != null && roles.getActiveFlag() == true
+								&& roleId != roles.getId().getRoleId())
+							iGenericDao.save(roles);
+					}
+				}
+
+				logger.info("updateUserDetails updated: '{}'" + userDetails.toString());
+				updateStatus = "updatedSucessFully";
+				logger.info(updateStatus + " " + userInfo.getFirstName() + " " + userInfo.getLastName());
+			} else {
+				logger.warn("updateUserDetails: '{}' " + userInfo.getFirstName() + " " + userInfo.getLastName()
+						+ " and userId : " + userInfo.getUserId() + " not available!");
+				updateStatus = "userDetailsNotExist";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return updateStatus;
+	}
+	
+	@Override
+	public String getChangePassword(SignUpSearchBean signUpSearchBean) {
+		List<?> list = null;
+		String resultflag = "";
+		try {
+			if (signUpSearchBean.getPasswordType() != null) {
+				if (signUpSearchBean.getPasswordType().equals("C")) {
+					list = iGenericDao.executeDDLHQL(JavaConstant.USER_CHANGE_PASSWD,
+							new Object[] { signUpSearchBean.getLoginId() });
+					if (list != null && list.size() > 0) {
+						Object[] value = (Object[]) list.get(0);
+						Integer userId = (Integer) value[0];
+						String userPwd = (String) value[2];
+						if (!userPwd.equals(signUpSearchBean.getNewPassword())
+								&& userPwd.equals(signUpSearchBean.getOldPassword())) {
+							iGenericDao.executeDMLHQL(JavaConstant.USER_UPDATE_PASSWD,
+									new Object[] { signUpSearchBean.getNewPassword(), userId });
+							UserPasswordHistory userPasswordHistory = new UserPasswordHistory();
+							userPasswordHistory.setUserId(userId);
+							userPasswordHistory.setOldPassword(userPwd);
+							iGenericDao.save(userPasswordHistory);
+							resultflag = "200";
+						} else
+							resultflag = "201";
+					} else
+						resultflag = "202";
+				} else if (signUpSearchBean.getPasswordType().equals("F")) {
+					list = iGenericDao.executeDDLHQL(JavaConstant.USER_CHANGE_PASSWD,
+							new Object[] { signUpSearchBean.getLoginId() });
+
+					if (list == null || list.size() == 0) {
+						return "202";
+					}
+
+					if (list != null && list.size() > 0 && signUpSearchBean.getNewPassword() != null) {
+						Object[] value = (Object[]) list.get(0);
+						Integer userId = (Integer) value[0];
+						String userPwd = (String) value[2];
+						iGenericDao.executeDMLHQL(JavaConstant.USER_UPDATE_PASSWD,
+								new Object[] { signUpSearchBean.getNewPassword(), userId });
+						UserPasswordHistory userPasswordHistory = new UserPasswordHistory();
+						userPasswordHistory.setUserId(userId);
+						userPasswordHistory.setOldPassword(userPwd);
+						iGenericDao.save(userPasswordHistory);
+						resultflag = "203";
+						return resultflag;
+					} else if (list != null && list.size() > 0 && signUpSearchBean.getNewPassword() == null)
+						return "206";
+					else
+						resultflag = "201";
+				}
+			} else
+				resultflag = "204";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultflag;
 	}
 }

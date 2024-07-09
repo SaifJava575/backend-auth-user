@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth.bean.Response;
+import com.auth.bean.SignUpSearchBean;
 import com.auth.bean.Status;
 import com.auth.bean.UserSignUpWrapper;
 import com.auth.service.UserService;
@@ -24,6 +26,51 @@ public class UserRestController {
 	@PostMapping("/signUp")
 	public Status saveUserDeatails(@RequestBody UserSignUpWrapper userSignUpWrapper) {
 		return userService.saveUserDeatails(userSignUpWrapper);
+	}
+	
+	@RequestMapping(value = "/updateUserDetails", method = RequestMethod.POST)
+	public @ResponseBody Response<?> updateUserDetails(@RequestBody UserSignUpWrapper userDetails) {
+		String savedStatus = "";
+		try {
+			savedStatus = userService.updateUserDetails(userDetails);
+			if (savedStatus == "userDetailsNotExist") {
+				return new Response<>(String.valueOf(HttpServletResponse.SC_NOT_FOUND),
+						"Users not exist");
+			} else if (savedStatus == "updatedSucessFully") {
+				return new Response<>(String.valueOf(HttpServletResponse.SC_OK), savedStatus);
+			} else {
+				return new Response<>(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
+						"error occured while updating Users");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Response<>(String.valueOf(HttpServletResponse.SC_EXPECTATION_FAILED), e.toString());
+		}
+	}
+	
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	public @ResponseBody Status getChangePassword(@RequestBody SignUpSearchBean signUpSearchBean) {
+		try {
+			String statusCode=userService.getChangePassword(signUpSearchBean);
+			if(statusCode!=null && statusCode.equals("200"))
+				return new Status("200", "SuccessFully Change Password");
+			else if(statusCode!=null && statusCode.equals("201"))
+				return new Status("201", "Old password and New Password Should not be same");
+			else if(statusCode!=null && statusCode.equals("202"))
+				return new Status("202", "Your login Id is not Exist");
+			else if(statusCode!=null && statusCode.equals("203"))
+				return new Status("203", "SuccessFully Updated Password");
+			else if(statusCode!=null && statusCode.equals("204"))
+				return new Status("204", "Password type should not be null");
+			else if(statusCode!=null && statusCode.equals("206"))
+				return new Status("200", "Login Id Exists");
+			else
+				return new Status("205", "FAILED");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Status("500", "Interna; Server Error");
+		}
 	}
 	
 	@RequestMapping(value = "/captcha", method = RequestMethod.GET)
