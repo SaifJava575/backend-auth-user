@@ -27,5 +27,10 @@ zonelabadmin
 regionlabadmin
 depotlabadmin
 
+Swagger UI : http://localhost:5200/swagger-ui/index.htm
+FCTEST https://fctest.fssai.gov.in/officer/enforcement/dashboard  
+User name :lsipl  password : Fssai@2024@
+Live     :lsipl   password :Admin@1234  otp 222222
+
 
   
