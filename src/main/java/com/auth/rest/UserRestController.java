@@ -1,6 +1,8 @@
 package com.auth.rest;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import com.auth.bean.Response;
 import com.auth.bean.SignUpSearchBean;
 import com.auth.bean.Status;
 import com.auth.bean.UserSignUpWrapper;
+import com.auth.bean.UserValidation;
 import com.auth.service.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +29,27 @@ public class UserRestController {
 	@PostMapping("/signUp")
 	public Status saveUserDeatails(@RequestBody UserSignUpWrapper userSignUpWrapper) {
 		return userService.saveUserDeatails(userSignUpWrapper);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@PostMapping("/signIn")
+	public JSONObject userValidationCheck(@RequestBody UserValidation userDetails) {
+		JSONObject json = new JSONObject();
+		try {
+			if (userDetails.getLoginId() == null || userDetails.getLoginId().equals("")) {
+				json.put("message", "please provide userName");
+				return json;
+			}
+			if (userDetails.getPassword() == null || userDetails.getPassword().equals("")) {
+				json.put("message", "please provide Password");
+				return json;
+			}
+			return userService.userValidationCheck(userDetails);
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("message", HttpStatus.EXPECTATION_FAILED);
+			return json;
+		}
 	}
 	
 	@RequestMapping(value = "/updateUserDetails", method = RequestMethod.POST)
