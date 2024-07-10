@@ -17,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.auth.bean.JavaConstant;
 import com.auth.bean.SignUpSearchBean;
 import com.auth.bean.Status;
 import com.auth.bean.UserSignUpWrapper;
+import com.auth.bean.UserValidation;
 import com.auth.dao.IGenericDao;
 import com.auth.entity.UserAndUserRolesPk;
 import com.auth.entity.UserDetails;
@@ -242,5 +244,48 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		return resultflag;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject userValidationCheck(UserValidation userDetails) {
+		JSONObject json = new JSONObject();
+		try {
+			List<?> details = iGenericDao.executeDDLSQL(JavaConstant.GET_USER_DETAILS,
+					new Object[] { userDetails.getLoginId() });
+			if (details.size() > 0) {
+				Map<String, Object> map = (Map<String, Object>) details.get(0);
+				Integer userId = (Integer) map.get("userId");
+				String userName = map.get("userName").toString();
+				String userPwd = map.get("userPwd").toString();
+				String userEmail = map.get("userEmail").toString();
+				String mobileNo = map.get("mobileNo").toString();
+				Boolean activeFlag = (Boolean) map.get("activeFlag");
+				if (userPwd != null && !userPwd.equals(userDetails.getPassword())) {
+					json.put("statusCode", "400");
+					json.put("message", "Invalid password");
+					json.put("userId", userDetails.getLoginId());
+					return json;
+				}
+				json.put("statusCode", "200");
+				json.put("message", "Valid Credential");
+				json.put("loginId", userDetails.getLoginId());
+				json.put("userId",userId);
+				json.put("userName",userName);
+				json.put("userPwd",userPwd);
+				json.put("userEmail",userEmail);
+				json.put("mobileNo",mobileNo);
+				json.put("activeFlag",activeFlag);
+				
+			} else {
+				json.put("statusCode", "400");
+				json.put("message", "Invalid loginId");
+				json.put("loginId", userDetails.getLoginId());
+				return json;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 }
