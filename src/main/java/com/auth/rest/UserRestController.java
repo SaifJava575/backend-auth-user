@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +55,7 @@ public class UserRestController {
 		}
 	}
 	
-	@RequestMapping(value = "/updateUserDetails", method = RequestMethod.POST)
+	@PostMapping("/updateUserDetails")
 	public @ResponseBody Response<?> updateUserDetails(@RequestBody UserSignUpWrapper userDetails) {
 		String savedStatus = "";
 		try {
@@ -74,7 +75,7 @@ public class UserRestController {
 		}
 	}
 	
-	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	@PostMapping("/changePassword")
 	public @ResponseBody Status getChangePassword(@RequestBody SignUpSearchBean signUpSearchBean) {
 		try {
 			String statusCode=userService.getChangePassword(signUpSearchBean);
@@ -99,7 +100,7 @@ public class UserRestController {
 		}
 	}
 	
-	@RequestMapping(value = "/captcha", method = RequestMethod.GET)
+	@GetMapping("/capcha")
 	public @ResponseBody void captchaRequest(HttpServletResponse response) {
 		try {
 			userService.captchaRequest(response);

@@ -13,5 +13,5 @@ public class JavaConstant {
    
 	public static final String GET_USER_DETAILS = "select user_id as \"userId\",login_id as \"loginId\",user_pwd as \"userPwd\",CONCAT(first_name,'',last_name) as \"userName\" ,user_email as \"userEmail\",user_mobile_no as \"mobileNo\",active_flag as \"activeFlag\" from users_details where login_id=?1 ";
 
-
+	public static final String QUERY_QUALITY_AND_PERCENTAGE ="SELECT query_name as \"quearyName\",ROUND(SUM(rating::numeric / position) / COUNT(result), 2) as \"quality\",ROUND(100. * COUNT(rating) FILTER ( WHERE rating < 3 ) / COUNT(rating), 2) as \"poorQueryPercentage\" FROM leetcode.Queries WHERE query_name IS NOT NULL GROUP BY query_name ";
 }

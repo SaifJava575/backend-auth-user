@@ -1,0 +1,11 @@
+
+#-------------------------------Query----------------
+CREATE TABLE IF NOT EXISTS leetcode.queries
+(
+    query_name character varying COLLATE pg_catalog."default",
+    result character varying COLLATE pg_catalog."default",
+    "position" integer,
+    rating integer
+)
+
+#----------------------------
