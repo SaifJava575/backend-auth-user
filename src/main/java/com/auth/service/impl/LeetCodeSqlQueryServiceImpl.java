@@ -25,4 +25,15 @@ public class LeetCodeSqlQueryServiceImpl implements ILeetCodeSqlQueryService {
 		}
 		return qualityPercentage;
 	}
+	
+	@Override
+	public List<?> monthlyTrasaction() {
+		List<?> transaction = null;
+		try {
+			transaction = iGenericDao.executeDDLSQL(JavaConstant.MONTHLY_TRANSACTION_API, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return transaction;
+	}
 }

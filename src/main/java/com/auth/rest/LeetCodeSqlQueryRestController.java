@@ -20,10 +20,20 @@ public class LeetCodeSqlQueryRestController {
 	private ILeetCodeSqlQueryService leetCodeService;
 
 	@GetMapping("/qualityAndPercentage")
-	public @ResponseBody List<?> captchaRequest() {
+	public @ResponseBody List<?> qualityAndPercentage() {
 		List<?> response = null;
 		try {
 			response = leetCodeService.qualityAndPercentage();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	@GetMapping("/monthlyTrasaction")
+	public @ResponseBody List<?> monthlyTrasaction() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.monthlyTrasaction();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
