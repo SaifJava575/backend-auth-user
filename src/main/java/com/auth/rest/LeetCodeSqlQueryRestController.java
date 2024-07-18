@@ -39,5 +39,17 @@ public class LeetCodeSqlQueryRestController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/immediateFoodDelivery")
+	public @ResponseBody List<?> immediateFoodDelivery() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.immediateFoodDelivery();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+
 
 }

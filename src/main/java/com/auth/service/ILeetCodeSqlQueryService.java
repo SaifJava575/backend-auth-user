@@ -8,4 +8,6 @@ public interface ILeetCodeSqlQueryService {
 
 	List<?> monthlyTrasaction();
 
+	List<?> immediateFoodDelivery();
+
 }

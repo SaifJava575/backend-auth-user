@@ -36,4 +36,15 @@ public class LeetCodeSqlQueryServiceImpl implements ILeetCodeSqlQueryService {
 		}
 		return transaction;
 	}
+	
+	@Override
+	public List<?> immediateFoodDelivery() {
+		List<?> immediateFoodelivery = null;
+		try {
+			immediateFoodelivery = iGenericDao.executeDDLSQL(JavaConstant.IMMEDIATE_FOOD_DELIVERY, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return immediateFoodelivery;
+	}
 }

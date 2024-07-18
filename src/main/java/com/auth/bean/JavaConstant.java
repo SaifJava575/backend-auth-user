@@ -16,4 +16,7 @@ public class JavaConstant {
 	public static final String QUERY_QUALITY_AND_PERCENTAGE ="SELECT query_name as \"quearyName\",ROUND(SUM(rating::numeric / position) / COUNT(result), 2) as \"quality\",ROUND(100. * COUNT(rating) FILTER ( WHERE rating < 3 ) / COUNT(rating), 2) as \"poorQueryPercentage\" FROM leetcode.Queries WHERE query_name IS NOT NULL GROUP BY query_name ";
 	
 	public static final String MONTHLY_TRANSACTION_API ="SELECT TO_CHAR(trans_date, 'YYYY-MM') AS month,country,COUNT(*) AS \"transCount\", COUNT(state) FILTER (WHERE state = 'approved') AS \"approvedCount\", SUM(amount) AS \"transTotalAmount\",COALESCE(SUM(amount) FILTER (WHERE state = 'approved'), 0) AS \"approvedTotalAmount\" FROM leetcode.Transactions GROUP BY month, country ";
+	
+	public static final String IMMEDIATE_FOOD_DELIVERY ="SELECT ROUND(AVG(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END)*100, 2) AS \"immediatePercentage\" FROM leetcode.Delivery WHERE (customer_id, order_date) IN (SELECT customer_id,MIN(order_date) FROM leetcode.Delivery GROUP BY customer_id) ";
+	
 }

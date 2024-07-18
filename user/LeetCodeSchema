@@ -8,4 +8,23 @@ CREATE TABLE IF NOT EXISTS leetcode.queries
     rating integer
 )
 
-#----------------------------
+#---------------------------- Transaction Api -----------------------
+-- Create table if not exists
+CREATE TABLE IF NOT EXISTS leetcode.Transactions (
+    id serial,
+    country VARCHAR(9),
+    state VARCHAR(9) CHECK (state IN ('approved', 'declined')),
+    amount INT,
+    trans_date DATE
+);
+
+-- Truncate the table
+TRUNCATE TABLE leetcode.Transactions;
+
+-- Insert values into the table
+INSERT INTO leetcode.Transactions (id, country, state, amount, trans_date) VALUES 
+(121, 'US', 'approved', 1000, '2018-12-18'),
+(122, 'US', 'declined', 2000, '2018-12-19'),
+(123, 'US', 'approved', 2000, '2019-01-01'),
+(124, 'DE', 'approved', 2000, '2019-01-07');
+--------------------------------------------------------
