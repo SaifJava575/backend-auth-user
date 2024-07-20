@@ -47,4 +47,37 @@ public class LeetCodeSqlQueryServiceImpl implements ILeetCodeSqlQueryService {
 		}
 		return immediateFoodelivery;
 	}
+	
+	@Override
+	public List<?> gamePlayAnalysis() {
+		List<?> gamePlayAnalysis = null;
+		try {
+			gamePlayAnalysis = iGenericDao.executeDDLSQL(JavaConstant.GAME_PLAY_ANALYSIS, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gamePlayAnalysis;
+	}
+	
+	@Override
+	public List<?> numberOfUniqueSubject() {
+		List<?> numberOfUniqueSubject = null;
+		try {
+			numberOfUniqueSubject = iGenericDao.executeDDLSQL(JavaConstant.NUMBER_OF_UNIQUE_SUBJECT, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return numberOfUniqueSubject;
+	}
+	
+	@Override
+	public List<?> userActivePast30Days() {
+		List<?> userActivePast30Days = null;
+		try {
+			userActivePast30Days = iGenericDao.executeDDLSQL(JavaConstant.USER_ACTIVITY_PAST_30_DAYS, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userActivePast30Days;
+	}
 }

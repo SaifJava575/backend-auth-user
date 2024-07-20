@@ -19,4 +19,8 @@ public class JavaConstant {
 	
 	public static final String IMMEDIATE_FOOD_DELIVERY ="SELECT ROUND(AVG(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END)*100, 2) AS \"immediatePercentage\" FROM leetcode.Delivery WHERE (customer_id, order_date) IN (SELECT customer_id,MIN(order_date) FROM leetcode.Delivery GROUP BY customer_id) ";
 	
+	public static final String GAME_PLAY_ANALYSIS ="select round (count(*)::numeric / (select count (distinct player_id) from leetcode.activity) , 2) as \"fraction\" from leetcode.activity where (player_id , event_date) in (select player_id , min(event_date) + 1 firstLog from leetcode.activity  group by 1 )";
+	
+	public static final String NUMBER_OF_UNIQUE_SUBJECT="SELECT teacher_id as \"teacherId\", COUNT(DISTINCT subject_id) AS \"count\" FROM leetcode.Teacher GROUP BY 1 ";
+	public static final String USER_ACTIVITY_PAST_30_DAYS="select activity_date as day ,Count(distinct user_id)  as \"activeUsers\" from leetcode.user_Activity where activity_date between '2019-06-28' and '2019-07-27' group by activity_date ";
 }

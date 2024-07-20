@@ -10,4 +10,10 @@ public interface ILeetCodeSqlQueryService {
 
 	List<?> immediateFoodDelivery();
 
+	List<?> gamePlayAnalysis();
+
+	List<?> numberOfUniqueSubject();
+
+	List<?> userActivePast30Days();
+
 }

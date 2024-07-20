@@ -50,6 +50,40 @@ public class LeetCodeSqlQueryRestController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/gamePlayAnalysis")
+	public @ResponseBody List<?> gamePlayAnalysis() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.gamePlayAnalysis();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("/numberOfUniqueSubject")
+	public @ResponseBody List<?> numberOfUniqueSubject() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.numberOfUniqueSubject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("/userActivePast30Days")
+	public @ResponseBody List<?> userActivePast30Days() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.userActivePast30Days();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+
 
 
 }
