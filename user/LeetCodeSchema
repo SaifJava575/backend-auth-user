@@ -114,4 +114,25 @@ INSERT INTO leetcode.user_Activity (user_id, session_id, activity_date, activity
 INSERT INTO leetcode.user_Activity (user_id, session_id, activity_date, activity_type) VALUES (4, 3, '2019-06-25', 'open_session');
 INSERT INTO leetcode.user_Activity (user_id, session_id, activity_date, activity_type) VALUES (4, 3, '2019-06-25', 'end_session');
 
+--------------------------------------- COUNT 5 STUDETNS -------------------
+-- Create table if it does not exist
+CREATE TABLE IF NOT EXISTS leetcode.Courses (
+    student VARCHAR(255),
+    class VARCHAR(255)
+);
 
+-- Truncate the table to remove any existing records
+TRUNCATE TABLE leetcode.Courses;
+
+-- Insert the given records
+INSERT INTO leetcode.Courses (student, class) VALUES ('A', 'Math');
+INSERT INTO leetcode.Courses (student, class) VALUES ('B', 'English');
+INSERT INTO leetcode.Courses (student, class) VALUES ('C', 'Math');
+INSERT INTO leetcode.Courses (student, class) VALUES ('D', 'Biology');
+INSERT INTO leetcode.Courses (student, class) VALUES ('E', 'Math');
+INSERT INTO leetcode.Courses (student, class) VALUES ('F', 'Computer');
+INSERT INTO leetcode.Courses (student, class) VALUES ('G', 'Math');
+INSERT INTO leetcode.Courses (student, class) VALUES ('H', 'Math');
+INSERT INTO leetcode.Courses (student, class) VALUES ('I', 'Math');
+
+-------------------------------------------

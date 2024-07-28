@@ -13,7 +13,7 @@ import com.auth.service.ILeetCodeSqlQueryService;
 
 @CrossOrigin(value = "http://localhost:4200")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/leetcode")
 public class LeetCodeSqlQueryRestController {
 
 	@Autowired
@@ -78,6 +78,28 @@ public class LeetCodeSqlQueryRestController {
 		List<?> response = null;
 		try {
 			response = leetCodeService.userActivePast30Days();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("/productSalesAnalysis")
+	public @ResponseBody List<?> productSalesAnalysis() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.productSalesAnalysis();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("/moreThan5Students")
+	public @ResponseBody List<?> moreThan5Students() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.moreThan5Students();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

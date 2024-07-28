@@ -23,4 +23,8 @@ public class JavaConstant {
 	
 	public static final String NUMBER_OF_UNIQUE_SUBJECT="SELECT teacher_id as \"teacherId\", COUNT(DISTINCT subject_id) AS \"count\" FROM leetcode.Teacher GROUP BY 1 ";
 	public static final String USER_ACTIVITY_PAST_30_DAYS="select activity_date as day ,Count(distinct user_id)  as \"activeUsers\" from leetcode.user_Activity where activity_date between '2019-06-28' and '2019-07-27' group by activity_date ";
+	
+	public static final String PRODUT_SALES_ANALYSIS="select subquery.product_id as \"productId\", subquery.first_year as \"firstYear\", subquery.quantity as \"quantity\", subquery.price as \"price\", prd.product_name as \"productName\" from(select product_id, year, quantity, price, first_value(year) over (partition by product_id order by product_id, year) as first_year from leetcode.Sales) as subquery inner join leetcode.product prd on prd.product_id=subquery.product_id where year = first_year ";
+	
+	public static final String MORE_THAN_5_STUDENTS="SELECT class as \"class\" FROM leetcode.Courses GROUP BY class HAVING COUNT(class) >= 5 ";
 }

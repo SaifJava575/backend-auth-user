@@ -16,4 +16,8 @@ public interface ILeetCodeSqlQueryService {
 
 	List<?> userActivePast30Days();
 
+	List<?> productSalesAnalysis();
+
+	List<?> moreThan5Students();
+
 }
