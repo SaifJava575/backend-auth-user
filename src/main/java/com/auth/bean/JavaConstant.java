@@ -27,4 +27,9 @@ public class JavaConstant {
 	public static final String PRODUT_SALES_ANALYSIS="select subquery.product_id as \"productId\", subquery.first_year as \"firstYear\", subquery.quantity as \"quantity\", subquery.price as \"price\", prd.product_name as \"productName\" from(select product_id, year, quantity, price, first_value(year) over (partition by product_id order by product_id, year) as first_year from leetcode.Sales) as subquery inner join leetcode.product prd on prd.product_id=subquery.product_id where year = first_year ";
 	
 	public static final String MORE_THAN_5_STUDENTS="SELECT class as \"class\" FROM leetcode.Courses GROUP BY class HAVING COUNT(class) >= 5 ";
+	
+	public static final String FIND_FOLLOWERS_COUNT="select user_id as \"userId\",count(follower_id) as \"followersCount\" from leetcode.followers group by user_id order by user_id asc ";
+	
+	public static final String SINGLE_BIGGEST_INTEGER="SELECT MAX(foo.num) AS num FROM (SELECT num FROM leetcode.MyNumbers GROUP BY num HAVING COUNT(*)=1) as foo ";
+	
 }

@@ -105,6 +105,28 @@ public class LeetCodeSqlQueryRestController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/findsFollowersCount")
+	public @ResponseBody List<?> findsFollowersCount() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.findsFollowersCount();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("/singleBiggestInteger")
+	public @ResponseBody List<?> singleBiggestInteger() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.singleBiggestInteger();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
 
 
 

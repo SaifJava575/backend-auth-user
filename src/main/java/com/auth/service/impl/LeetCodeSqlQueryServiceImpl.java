@@ -102,4 +102,26 @@ public class LeetCodeSqlQueryServiceImpl implements ILeetCodeSqlQueryService {
 		}
 		return moreThan5Students;
 	}
+	
+	@Override
+	public List<?> findsFollowersCount() {
+		List<?> findsFollowersCount = null;
+		try {
+			findsFollowersCount = iGenericDao.executeDDLSQL(JavaConstant.FIND_FOLLOWERS_COUNT, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return findsFollowersCount;
+	}
+	
+	@Override
+	public List<?> singleBiggestInteger() {
+		List<?> singleBiggestInteger = null;
+		try {
+			singleBiggestInteger = iGenericDao.executeDDLSQL(JavaConstant.SINGLE_BIGGEST_INTEGER, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return singleBiggestInteger;
+	}
 }

@@ -20,4 +20,8 @@ public interface ILeetCodeSqlQueryService {
 
 	List<?> moreThan5Students();
 
+	List<?> findsFollowersCount();
+
+	List<?> singleBiggestInteger();
+
 }
