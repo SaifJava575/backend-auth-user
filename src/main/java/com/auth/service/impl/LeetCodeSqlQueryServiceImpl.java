@@ -124,4 +124,26 @@ public class LeetCodeSqlQueryServiceImpl implements ILeetCodeSqlQueryService {
 		}
 		return singleBiggestInteger;
 	}
+	
+	@Override
+	public List<?> manager5DirectReports() {
+		List<?> manager5DirectReports = null;
+		try {
+			manager5DirectReports = iGenericDao.executeDDLSQL(JavaConstant.MANAGER_5_DIRECTS_REPORT, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return manager5DirectReports;
+	}
+	
+	@Override
+	public List<?> confirmationRate() {
+		List<?> confirmationRate = null;
+		try {
+			confirmationRate = iGenericDao.executeDDLSQL(JavaConstant.CONFIRMATION_RATE, new Object[] {});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return confirmationRate;
+	}
 }

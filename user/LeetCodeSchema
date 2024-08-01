@@ -169,5 +169,61 @@ INSERT INTO leetcode.MyNumbers (num) VALUES (1);
 INSERT INTO leetcode.MyNumbers (num) VALUES (4);
 INSERT INTO leetcode.MyNumbers (num) VALUES (5);
 INSERT INTO leetcode.MyNumbers (num) VALUES (6);
+-----------------------5 Direct Report -------------------
+CREATE TABLE IF NOT EXISTS leetcode.Employee (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    department VARCHAR(255),
+    managerId INT
+);
+
+-- Truncate the table to remove all existing data
+TRUNCATE TABLE leetcode.Employee;
+
+-- Insert data into the table
+INSERT INTO leetcode.Employee (id, name, department, managerId) VALUES
+(101, 'John', 'A', NULL),
+(102, 'Dan', 'A', 101),
+(103, 'James', 'A', 101),
+(104, 'Amy', 'A', 101),
+(105, 'Anne', 'A', 101),
+(106, 'Ron', 'B', 101);
+
+-----------------Confirmation Rate -------------------
+CREATE TABLE IF NOT EXISTS leetcode.Signups (
+    user_id INT,
+    time_stamp TIMESTAMP
+);
+
+-- Create the Confirmations table if it does not exist
+CREATE TABLE IF NOT EXISTS leetcode.Confirmations (
+    user_id INT,
+    time_stamp TIMESTAMP,
+    action VARCHAR(10) CHECK (action IN ('confirmed', 'timeout'))
+);
 
 
+-- Truncate the Signups table
+TRUNCATE TABLE leetcode.Signups;
+
+-- Insert data into the Signups table
+INSERT INTO leetcode.Signups (user_id, time_stamp) VALUES 
+('3', '2020-03-21 10:16:13'),
+('7', '2020-01-04 13:57:59'),
+('2', '2020-07-29 23:09:44'),
+('6', '2020-12-09 10:39:37');
+
+-- Truncate the Confirmations table
+TRUNCATE TABLE leetcode.Confirmations;
+
+-- Insert data into the Confirmations table
+INSERT INTO leetcode.Confirmations (user_id, time_stamp, action) VALUES 
+('3', '2021-01-06 03:30:46', 'timeout'),
+('3', '2021-07-14 14:00:00', 'timeout'),
+('7', '2021-06-12 11:57:29', 'confirmed'),
+('7', '2021-06-13 12:58:28', 'confirmed'),
+('7', '2021-06-14 13:59:27', 'confirmed'),
+('2', '2021-01-22 00:00:00', 'confirmed'),
+('2', '2021-02-28 23:59:59', 'timeout');
+
+--------------------------------

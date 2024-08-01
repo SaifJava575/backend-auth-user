@@ -24,4 +24,8 @@ public interface ILeetCodeSqlQueryService {
 
 	List<?> singleBiggestInteger();
 
+	List<?> manager5DirectReports();
+
+	List<?> confirmationRate();
+
 }

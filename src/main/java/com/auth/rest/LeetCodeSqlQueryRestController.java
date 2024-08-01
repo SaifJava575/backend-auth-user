@@ -127,6 +127,28 @@ public class LeetCodeSqlQueryRestController {
 		}
 		return response;
 	}
+	
+	@GetMapping("manager5DirectReports")
+	public @ResponseBody List<?> manager5DirectReports() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.manager5DirectReports();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
+	
+	@GetMapping("confirmationRate")
+	public @ResponseBody List<?> confirmationRate() {
+		List<?> response = null;
+		try {
+			response = leetCodeService.confirmationRate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return response;
+	}
 
 
 

@@ -31,5 +31,6 @@ public class JavaConstant {
 	public static final String FIND_FOLLOWERS_COUNT="select user_id as \"userId\",count(follower_id) as \"followersCount\" from leetcode.followers group by user_id order by user_id asc ";
 	
 	public static final String SINGLE_BIGGEST_INTEGER="SELECT MAX(foo.num) AS num FROM (SELECT num FROM leetcode.MyNumbers GROUP BY num HAVING COUNT(*)=1) as foo ";
-	
+	public static final String MANAGER_5_DIRECTS_REPORT="SELECT name as \"name\" FROM leetcode.Employee A JOIN(SELECT managerId, COUNT(managerId) AS no_of_reports FROM leetcode.Employee GROUP BY managerId HAVING COUNT(managerId) >= 5) AS B ON A.id = B.managerId ";
+	public static final String CONFIRMATION_RATE="SELECT s.user_id as \"userId\",ROUND(AVG(CASE WHEN action = 'confirmed' THEN 1 ELSE 0 END), 2) as \"confirmationRate\" FROM leetcode.Signups s LEFT JOIN leetcode.confirmations c on s.user_id = c.user_id GROUP BY s.user_id ";
 }
