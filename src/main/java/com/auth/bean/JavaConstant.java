@@ -33,4 +33,7 @@ public class JavaConstant {
 	public static final String SINGLE_BIGGEST_INTEGER="SELECT MAX(foo.num) AS num FROM (SELECT num FROM leetcode.MyNumbers GROUP BY num HAVING COUNT(*)=1) as foo ";
 	public static final String MANAGER_5_DIRECTS_REPORT="SELECT name as \"name\" FROM leetcode.Employee A JOIN(SELECT managerId, COUNT(managerId) AS no_of_reports FROM leetcode.Employee GROUP BY managerId HAVING COUNT(managerId) >= 5) AS B ON A.id = B.managerId ";
 	public static final String CONFIRMATION_RATE="SELECT s.user_id as \"userId\",ROUND(AVG(CASE WHEN action = 'confirmed' THEN 1 ELSE 0 END), 2) as \"confirmationRate\" FROM leetcode.Signups s LEFT JOIN leetcode.confirmations c on s.user_id = c.user_id GROUP BY s.user_id ";
+	public static final String TWEETS_DATA_COUNT="select tweet_count_per_user AS \"tweetBucket\", COUNT(user_id) AS \"usersNum\" FROM (SELECT user_id,COUNT(tweet_id) AS tweet_count_per_user FROM datalamour.tweets WHERE tweet_date BETWEEN '2022-01-01' AND '2022-12-31' GROUP BY user_id) AS total_tweets GROUP BY tweet_count_per_user ";
+	public static final String DATA_SCIENCE_SKILL="SELECT candidate_id as \"candidateId\" FROM datalamour.candidates WHERE skill IN ('Python', 'Tableau', 'PostgreSQL') GROUP BY candidate_id HAVING COUNT(skill) = 3 ORDER BY candidate_id ";
+	public static final String PAGE_NO_LIKES="SELECT page_id as \"pageID\",page_name as \"pageName\" FROM datalamour.pages WHERE NOT EXISTS (SELECT page_id FROM datalamour.page_likes AS likes WHERE likes.page_id = pages.page_id) ";
 }
