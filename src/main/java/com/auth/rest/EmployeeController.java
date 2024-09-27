@@ -12,11 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth.bean.ApplicatinBean;
+import com.auth.bean.Response;
+import com.auth.bean.SendViaEmailModel;
+import com.auth.bean.Status;
 import com.auth.empl.mockito.Employee;
 import com.auth.empl.mockito.EmployeeService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @CrossOrigin(value = "http://localhost:4200")
 @RestController
@@ -32,10 +38,15 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/employee/all")
-	public ResponseEntity<List<Employee>> getAllEmployees() {
-		List<Employee> employees = this.employeeService.getAllEmployees();
-		return new ResponseEntity<List<Employee>>(employees, HttpStatus.OK);
+	@PostMapping("/searchEmployee")
+	public List<?> getAllEmployees(@RequestBody ApplicatinBean applicationBean) {
+		List<?> employees =null;
+		try {
+			employees = employeeService.searchEmployeeData(applicationBean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return employees;	
 	}
 
 	@GetMapping(path = "employee/{id}")
@@ -49,10 +60,43 @@ public class EmployeeController {
 		Employee updatedEmployee = this.employeeService.updateEmployee(employeeId, employee);
 		return new ResponseEntity<Employee>(updatedEmployee, HttpStatus.OK);
 	}
+	
+	@PostMapping("/updateEmployee")
+	public @ResponseBody Response<?> updateEmployee(@RequestBody Employee employee) {
+		String savedStatus = "";
+		try {
+			savedStatus = employeeService.updateEmployeeInformation(employee);
+			if (savedStatus == "employeeNotExist") {
+				return new Response<>(String.valueOf(HttpServletResponse.SC_NOT_FOUND),
+						"employee id not exist please enter valid input");
+			} else if (savedStatus == "updatedSucessFully") {
+				return new Response<>(String.valueOf(HttpServletResponse.SC_OK), savedStatus);
+			} else {
+				return new Response<>(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),
+						"error occured while updating Employee Information");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Response<>(String.valueOf(HttpServletResponse.SC_EXPECTATION_FAILED), e.toString());
+		}
+	}
 
 	@DeleteMapping(path = "delete/{id}")
 	public ResponseEntity<String> deleteEmployeeById(@PathVariable("id") Long employeeId) {
 		this.employeeService.deleteEmployeeById(employeeId);
 		return new ResponseEntity<String>("Employee with Id : "+employeeId+" deleted successfully", HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveemails")
+	public Status saveEmails(@RequestBody SendViaEmailModel transMailQueueSender) {
+		try {
+			if(employeeService.saveEmails(transMailQueueSender))
+				return new Status(String.valueOf(HttpServletResponse.SC_OK), "200"); 
+			else
+				return new Status(String.valueOf(HttpServletResponse.SC_BAD_REQUEST),String.valueOf(HttpServletResponse.SC_OK));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Status(String.valueOf(HttpServletResponse.SC_EXPECTATION_FAILED), e.toString());
+		}
 	}
 }

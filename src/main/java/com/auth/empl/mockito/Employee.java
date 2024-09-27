@@ -12,7 +12,8 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-@Table(name = "employees", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})},schema = "mockito")
+//uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})}
+@Table(name = "employees",schema = "mockito")
 @Entity
 @NamedQuery(name = "Employee.findAll", query = "SELECT emp FROM Employee emp")
 public class Employee implements Serializable {
@@ -49,7 +50,7 @@ public class Employee implements Serializable {
 	@Column(name = "created_by")
 	private Integer createdBy;
 
-	@Column(name = "updated_on", insertable = true, updatable = false)
+	@Column(name = "updated_on")
 	private Timestamp updatedOn = new Timestamp(System.currentTimeMillis());
 
 	@Column(name = "updated_by")

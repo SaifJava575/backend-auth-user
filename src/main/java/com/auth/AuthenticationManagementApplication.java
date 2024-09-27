@@ -1,10 +1,20 @@
 package com.auth;
 
+import java.io.IOException;
+import java.util.Properties;
+
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.VelocityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.ui.velocity.VelocityEngineFactory;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 
@@ -14,6 +24,44 @@ public class AuthenticationManagementApplication implements CommandLineRunner {
 
 	@Autowired
 	private Environment environment;
+
+    @Bean
+    @Primary
+    JavaMailSender getJavaMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		
+		// final String user="itlearn575@gmail.com";//change accordingly  
+		  //final String password="ntmulytioeyxfano";//change accordingly  
+		   
+		mailSender.setUsername("itlearn575@gmail.com");
+		mailSender.setPassword("ntmulytioeyxfano");
+
+		System.out.println("================calling normal email=================");
+
+		Properties props = mailSender.getJavaMailProperties();
+
+    	 props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		 props.put("mail.smtp.socketFactory.fallback", "true");
+		 props.put("mail.transport.protocol", "smtp");
+		 props.put("mail.smtp.host", "smtp.gmail.com");
+		 props.put("mail.smtp.auth", "true");
+		 props.put("mail.smtp.starttls.enable", "true");
+		 props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+		 props.put("mail.smtp.port", "465");
+		 props.put("mail.smtp.debug", "true");
+		
+		return mailSender;
+	}
+
+    @Bean
+    VelocityEngine getVelocityEngine() throws VelocityException, IOException{
+        VelocityEngineFactory factory = new VelocityEngineFactory();
+        Properties props = new Properties();
+        props.put("resource.loader", "class");
+        props.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        factory.setVelocityProperties(props);
+        return factory.createVelocityEngine();      
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(AuthenticationManagementApplication.class, args);

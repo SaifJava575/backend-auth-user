@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CountQueryResultHolder {
+	
 	Map<String, String> countQueryContainer = new ConcurrentHashMap<>();
 	Map<UUID, CompletableFuture<Long>> queryResults = new ConcurrentHashMap<>();
 	
@@ -40,4 +41,5 @@ public class CountQueryResultHolder {
 		return queryResults.containsKey(identifier);
 	}
 	
+
 }

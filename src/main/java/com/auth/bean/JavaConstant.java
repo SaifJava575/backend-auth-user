@@ -36,4 +36,7 @@ public class JavaConstant {
 	public static final String TWEETS_DATA_COUNT="select tweet_count_per_user AS \"tweetBucket\", COUNT(user_id) AS \"usersNum\" FROM (SELECT user_id,COUNT(tweet_id) AS tweet_count_per_user FROM datalamour.tweets WHERE tweet_date BETWEEN '2022-01-01' AND '2022-12-31' GROUP BY user_id) AS total_tweets GROUP BY tweet_count_per_user ";
 	public static final String DATA_SCIENCE_SKILL="SELECT candidate_id as \"candidateId\" FROM datalamour.candidates WHERE skill IN ('Python', 'Tableau', 'PostgreSQL') GROUP BY candidate_id HAVING COUNT(skill) = 3 ORDER BY candidate_id ";
 	public static final String PAGE_NO_LIKES="SELECT page_id as \"pageID\",page_name as \"pageName\" FROM datalamour.pages WHERE NOT EXISTS (SELECT page_id FROM datalamour.page_likes AS likes WHERE likes.page_id = pages.page_id) ";
+	
+	public static final String UPDATE_EMPLOYEE_INFO=" from Employee where id=?1 ";
+	public static final String SEARCH_EMPLOYEE_HISTORY=" from Employee emp ";
 }
