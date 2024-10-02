@@ -2,6 +2,7 @@ package com.auth.empl.mockito;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,6 +65,10 @@ public class Employee implements Serializable {
 	
 	@Column(name="mobile_num")
 	private String mobileNum;
+	
+	@Column(name = "date_of_birth")
+	private Date dateOfBirth  ;
+
 
 	public Long getId() {
 		return id;
@@ -199,6 +204,14 @@ public class Employee implements Serializable {
 
 	public void setMobileNum(String mobileNum) {
 		this.mobileNum = mobileNum;
+	}
+
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 }
