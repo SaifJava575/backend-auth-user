@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.auth.bean.ApplicatinBean;
 import com.auth.bean.Response;
@@ -21,6 +25,10 @@ import com.auth.bean.SendViaEmailModel;
 import com.auth.bean.Status;
 import com.auth.empl.mockito.Employee;
 import com.auth.empl.mockito.EmployeeService;
+import com.auth.utility.UtilProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -31,9 +39,25 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private UtilProperty utility;
+	
+   
 
-	@PostMapping("/employee")
-	public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+	@PostMapping(value = "/employee", headers = ("content-type=multipart/*"))
+	public ResponseEntity<Employee> createEmployee(@RequestParam(value = "file", required = false) MultipartFile file,
+			@RequestParam("json") String json) {
+		Employee employee = null;
+		try {
+			employee = new ObjectMapper().readValue(json, Employee.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		String filePath = utility.UploadFile(file);
+		if (filePath != null && !filePath.equals("")) {
+			employee.setFilePath(filePath);
+		}
 		Employee savedEmployee = this.employeeService.saveEmployee(employee);
 		return new ResponseEntity<Employee>(savedEmployee, HttpStatus.CREATED);
 	}
@@ -99,4 +123,10 @@ public class EmployeeController {
 			return new Status(String.valueOf(HttpServletResponse.SC_EXPECTATION_FAILED), e.toString());
 		}
 	}
+	
+	@GetMapping("viewDocumet/{id}")
+	   public @ResponseBody void viewRawPdf(@PathVariable("id") Integer documentId  ,HttpServletResponse response) {		   
+		utility.viewRawPdf(documentId, response);
+		   
+	   }
 }

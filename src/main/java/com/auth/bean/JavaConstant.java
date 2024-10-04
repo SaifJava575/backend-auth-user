@@ -39,4 +39,6 @@ public class JavaConstant {
 	
 	public static final String UPDATE_EMPLOYEE_INFO=" from Employee where id=?1 ";
 	public static final String SEARCH_EMPLOYEE_HISTORY=" select  new map(emp.id as empId,emp.firstName as firstName,emp.lastName as lastName,emp.email as email,emp.age as age,emp.qualification as qualification,emp.address as address,emp.professional as professional,emp.activeFlag as activeFlag,emp.gender as gender,emp.mobileNum as mobileNum,to_char(emp.dateOfBirth,'yyyy-MM-dd') as dateOfBirth)from Employee emp ";
+
+	public static final String GET_DOCUMENT_PATH_FILE = " select new map(emp.filePath as filePath) from Employee emp where emp.id=?1 ";
 }

@@ -54,10 +54,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee saveEmployee(Employee employee) {
-		Optional<Employee> optionalEmployee = this.employeeRepository.findByEmail(employee.getEmail());
+		/*Optional<Employee> optionalEmployee = this.employeeRepository.findByEmail(employee.getEmail());
 		if (optionalEmployee.isPresent()) {
 			throw new ResourceAlreadyExistsException("Employee", "email", employee.getEmail());
-		}
+		} */
 		employee.setActiveFlag(true);
 		Employee savedEmployee = this.employeeRepository.save(employee);
 		Long id=savedEmployee.getId();
@@ -68,6 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		model.put("mobileNum", employee.getMobileNum());
 		
 		try {
+			if(employee.getEmail()!=null && !employee.getEmail().equals(""))
 			utilProperty.sendEmails("Employee Registration", "templates/employeeRegistration.vm", "",
 					model, employee.getEmail(), "", "");
 		} catch (Exception e) {

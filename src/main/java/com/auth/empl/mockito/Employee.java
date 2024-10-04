@@ -20,6 +20,7 @@ import jakarta.persistence.UniqueConstraint;
 public class Employee implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -68,6 +69,9 @@ public class Employee implements Serializable {
 	
 	@Column(name = "date_of_birth")
 	private Date dateOfBirth  ;
+	
+	@Column(name = "file_path")
+	private String filePath;
 
 
 	public Long getId() {
@@ -212,6 +216,14 @@ public class Employee implements Serializable {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 }
